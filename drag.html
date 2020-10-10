@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{margin: 0;padding:0;}
+        body{padding-top: 20px;}
+        .head li{float: left;list-style: none;margin-left: 15px;}
+        .head{overflow: auto;zoom: 1;}
+        #dri{width: 100px;height: 20px;margin-left: 15px}
+        .edit .editBtn{margin-right: 20px;width: 240px;height: 30px;box-sizing: border-box;float: left}
+        .edit .editBtn button{margin-left: 10px;width: 70px;height: 30px;box-sizing: border-box;float: left}
+        /*.showWays{float: left;}*/
+        .showWays{width:330px;height: 30px;box-sizing: border-box;float: left}
+        .showWays select{display: block;width: 100px;height: 30px;float: left;margin-left: 10px;}
+        /*.showWays select option{display: block;width: 100px;height: 30px;}*/
+        .editArea{width: 900px;height: 500px;border: 1px solid red;box-sizing: border-box;margin:30px;float: left;background-color: #e2d8d8 }
+        .editArea .content{width: 850px;height: 450px;margin-top: 25px;margin-left: 25px;border: 1px solid red;background-color: white;}
+        .label{margin-top: 30px;margin-left: 1000px;}
+        .label dt{font-weight: bold}
+        .label:after{content: "";width: 0;height: 0;visibility: hidden;clear: both;}
+    </style>
+</head>
+<body>
+<div class="head">
+    <ul>
+        <li>开料优化</li>
+        <li>加工参数</li>
+        <li>标签模板</li>
+        <li>材料库</li>
+        <li>标准件</li>
+        <li>全局参数</li>
+    </ul>
+</div>
+<div>
+    <select id="dri">
+        <option value="">80*60 竖</option>
+    </select>
+</div>
+<div>
+    <div class="edit">
+        <div class="editBtn">
+            <button>左对齐</button>
+            <button>右对齐</button>
+            <button>左右居中</button>
+        </div>
+        <div class="showWays">
+            <select name="" id="qr">
+                <option value="">二维码</option>
+            </select>
+            <select name="" id="typeface">
+                <option value="">微软雅黑</option>
+            </select>
+            <select name="" id="fontsize">
+                <option value="">12</option>
+            </select>
+        </div>
+        <button style="float: left;margin-left: 10px">保存设置</button>
+        <input type="text" oninput="chang()">
+    </div>
+    <div class="editArea">
+        <div class="content"></div>
+    </div>
+    <div class="label">
+        <dl class="dragWrap">
+            <dt>标签域</dt>
+            <dd draggable="true" id="serialNumber">编号</dd>
+            <dd draggable="true" id="encoded">编码</dd>
+            <dd draggable="true" id="boardName">板件名称</dd>
+            <dd draggable="true" id="material">基材</dd>
+            <dd draggable="true" id="orderDate">订单日期</dd>
+            <dd draggable="true" id="orderNumber">订单编号</dd>
+            <dd draggable="true" id="clientName">客户名称</dd>
+            <dd draggable="true" id="productName">产品名称</dd>
+            <dd draggable="true" id="lwh">长*宽*高</dd>
+            <dd draggable="true" id="frontBarCode">正面条码</dd>
+            <dd draggable="true" id="reverseBarCode">反面条码</dd>
+            <dd draggable="true" id="rotate">旋转</dd>
+            <dd draggable="true" id="edgeBandingLen1">封边长1</dd>
+            <dd draggable="true" id="edgeBandingLen2">封边长2</dd>
+            <dd draggable="true" id="edgeBandingWidth1">封边宽1</dd>
+            <dd draggable="true" id="edgeBandingWidth2">封边宽2</dd>
+            <dd draggable="true" id="remark1">备注1</dd>
+            <dd draggable="true" id="remark2">备注2</dd>
+        </dl>
+    </div>
+</div>
+</body>
+<script>
+    function chang() {
+            console.log(this)
+            debugger
+        }
+    window.onload=function () {
+        
+        //获取被拖动的元素
+        var eleDrag;
+        var dd=document.getElementsByClassName('label')[0].getElementsByTagName('dd');
+        console.log(dd)
+        var dragWrap = document.getElementsByClassName('dragWrap')[0]
+        dragWrap.ondragstart = function (ev) {
+            ev.dataTransfer.effectAllowed = "move";
+            ev.dataTransfer.setData("labelID", ev.target.id);
+        }
+        dragWrap.ondragend = function(ev) {
+            ev.dataTransfer.clearData("labelID");
+        }
+        var drop=document.getElementsByClassName('content')[0];
+        // for(var i=0;i<dd.length;i++ ){
+        //     dd[i].ondragstart=function (ev) {
+        //         ev.dataTransfer.effectAllowed = "move";
+        //         ev.dataTransfer.setData("labelID", this.id);
+        //         eleDrag = ev.target;
+        //     }
+        //     dd[i].ondragend = function(ev) {
+        //         //拖拽结束
+        //         ev.dataTransfer.clearData("labelID");
+        //         eleDrag = null;
+        //         return false
+        //     };
+        // }
+        drop.ondragenter = function(){ //源对象进入目标对象
+            console.log('drag enter');
+            //drop.style.opacity = "1"; //将透明度变成1
+        }
+        drop.ondragleave= function(){  //源对象离开目标对象后
+            console.log('drag leave');
+            //drop.style.opacity = ".2"; //将透明度变为0.2
+        }
+        //这个比较容易掉，导致drop事件无法触发
+        drop.ondragover= function(e){  //源对象在悬停在目标对象上时
+            e.preventDefault();  //阻止默认行为，使得drop可以触发
+        }
+        drop.ondrop= function(e){ //源对象松手释放在了目标对象中
+            console.log('drop');
+            //drop.style.opacity = ".2"; //将透明度变为0.2
+            var id = e.dataTransfer.getData('labelID');//得到数据--id值
+            drop.innerText=id;
+        }
+    }
+</script>
+</html>
